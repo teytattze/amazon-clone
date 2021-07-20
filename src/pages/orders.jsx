@@ -9,7 +9,7 @@ export const getServerSideProps = async (context) => {
   const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
   const session = await getSession(context);
 
-  if (!session) return { props: null };
+  if (!session) return { props: { orders: [] } };
 
   const stripeOrders = await db
     .collection("users")
@@ -40,6 +40,7 @@ export const getServerSideProps = async (context) => {
 
 function Orders({ orders }) {
   const [session] = useSession();
+  console.log(orders);
 
   return (
     <div>
@@ -50,26 +51,28 @@ function Orders({ orders }) {
         </h1>
 
         {session ? (
-          <h2>No order</h2>
+          orders ? (
+            <div className="mt-5 space-y-4">
+              {orders.map(
+                ({ id, amount, amountShipping, items, timestamp, images }) => (
+                  <Order
+                    key={id}
+                    id={id}
+                    amount={amount}
+                    amountShipping={amountShipping}
+                    items={items}
+                    timestamp={timestamp}
+                    images={images}
+                  />
+                )
+              )}
+            </div>
+          ) : (
+            <h2>No order</h2>
+          )
         ) : (
           <h2>Please sign in to see your order</h2>
         )}
-
-        <div className="mt-5 space-y-4">
-          {orders.map(
-            ({ id, amount, amountShipping, items, timestamp, images }) => (
-              <Order
-                key={id}
-                id={id}
-                amount={amount}
-                amountShipping={amountShipping}
-                items={items}
-                timestamp={timestamp}
-                images={images}
-              />
-            )
-          )}
-        </div>
       </main>
     </div>
   );
