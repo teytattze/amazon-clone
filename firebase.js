@@ -1,11 +1,17 @@
-import firebase from 'firebase';
+import firebase from "firebase";
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAyd00jAO-wbX1bAJnI8bHdn_LPmKxkzpM',
-  authDomain: 'ecommerce-web-app-395a8.firebaseapp.com',
-  projectId: 'ecommerce-web-app-395a8',
-  storageBucket: 'ecommerce-web-app-395a8.appspot.com',
-  messagingSenderId: '791605284985',
-  appId: '1:791605284985:web:5cf2eb69216ebe605e04a8',
-  measurementId: 'G-T56D6W5BV9',
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
+
+const app = !firebase.apps.length
+  ? firebase.initializeApp(firebaseConfig)
+  : firebase.app();
+
+export const db = app.firestore();
