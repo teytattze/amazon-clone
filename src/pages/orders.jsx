@@ -50,7 +50,7 @@ function Orders({ orders }) {
         </h1>
 
         {session ? (
-          <h2>x orders</h2>
+          <h2>No order</h2>
         ) : (
           <h2>Please sign in to see your order</h2>
         )}
